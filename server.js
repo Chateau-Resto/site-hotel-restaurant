@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 
 // 加载 .env 文件
-require('dotenv').config({ path: path.join(__dirname, '..', '.env')}); 
+require('dotenv').config({ path: path.join(__dirname, '.env')}); 
 console.log('EMAIL_USER:', process.env.EMAIL_USER);
 console.log('EMAIL_PASS:', process.env.EMAIL_PASS);
 
@@ -15,8 +15,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // 服务 public/ 目录中的静态文件 (css,js等)
-app.use(express.static(path.join(__dirname, '../public'))); 
-console.log('Serving static files from:', path.join(__dirname, '../public'));
+app.use(express.static(path.join(__dirname, 'public'))); 
+console.log('Serving static files from:', path.join(__dirname, 'public'));
 
 //专用路由加载 restaurant-booking.html
 app.get('/booking', (req, res) => {
