@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Château Corneille - Restaurant réservation</title>
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/flexslider.css" type="text/css">
+    <link href="../css/styles.css?v=1.6" rel="stylesheet">
+    <link href="../css/queries.css?v=1.6" rel="stylesheet">
+    <link href="../css/jquery.fancybox.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900,100italic,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
+      <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+      <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+      <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <![endif]-->
+    <style>
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        input, select, textarea, button {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+			box-sizing: border-box
+        }
+		textarea {
+		    height: 100px;
+			resize: vertical;
+		}	
+        input:focus, select:focus, textara:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .error {
+            color: red;
+            font-size: 0.9rem;
+            display: none;
+        }
+        .note {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 0.5rem;
+		}
+        @media (max-width: 600px) {
+            .container {
+                margin: 1rem;
+                padding: 1rem;
+            }
+        }
+    </style>
+	</head>
+    <body>
+      <section class="navigation">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="row">
+              <div class="col-md-2">
+                <div class="block-logo">
+                  <a href="../index.html"><img src="../img/logo_r.png" class="img-responsive logo" alt=""></a>
+                </div>
+              </div>
+              <div class="col-md-10 text-center">
+                 <nav>
+                  <ul class="top-nav">
+                    <li><a href="../index.html">Hôtel</a></li>
+                    <li><a href="chambres.html">Nos Chambres</a></li>
+                    <li><a href="restaurant.html" class="active">Restaurant</a></li>
+                    <li><a href="packages.html">Packages & Bons Cadeaux</a></li>
+                    <li><a href="reception.html">Evénements</a></li>
+                    <li><a href="seminaire.html">Affaires</a></li>
+                    <li><a href="reservation.html">Réservation</a></li>
+                    <li><a href="../en/hotel.html" class="language-nav-btn">English</a></li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="language">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12 text-center">
+              <a href="../en/hotel.html" class="title-language-btn">english</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!--<section class="hero-rest">
+        <div class="container-fluid">
+          <div class="row text-center block-coord">
+            <div class="col-md-3">
+              <h1 class="title-reser margin-xs"> réservez dès maintenant</h1>
+            </div>
+            <div class="col-md-3">
+              <div class="title-phone margin-xs">02 32 77 44 77</div>
+            </div>
+            <div class="col-md-3">
+              <a href="mailto:chateau-corneille@orange.fr" class="title-mail margin-xs">chateau-corneille@orange.fr</a>
+            </div>
+			<div class="col-md-3">
+              <a target="_blank" title="Réservation en ligne" href="https://www.restaurant-lacloserie.com/httpswwwrestaurant-lacloseriefrreservation/" class="reser-btn-2">Réservez une table</a>
+            </div> 
+          </div>
+        </div>
+      </section> -->
+	  <section class="block-intro">    
+      <div class="container">
+        <h1>Réservez votre table / Book your talbe </h1>
+        <form id="bookingForm" action="/api/book" method="POST" onsubmit="handleSubmit(event)">
+            <div class="form-group">
+                <label for="name">Nom et Prenom / First and Last Name</label>
+                <input type="text" id="name" name="name" required>
+                <span class="error" id="nameError">Veuillez entrer votre nom / Please input your name</span>
+            </div>
+            <div class="form-group">
+                <label for="date">Date souhaitée / desired date</label>
+                <input type="date" id="date" name="date" required>
+                <span class="error" id="dateError">Veuillez choisir une date / Please choose a date</span>
+            </div>
+            <div class="form-group">
+                <label for="time">Heure shouhaitée / hours</label>
+                <select id="time" name="time" required>
+                    <option value="">Heure shouhaitée / hours</option>
+                    <option value="12:00">12:00</option>
+					<option value="12:30">12:30</option>
+					<option value="13:00">13:00</option>
+					<option value="13:30">13:30</option>
+                    <option value="19:00">19:00</option>
+					<option value="19:30">19:30</option>
+                    <option value="20:00">20:00</option>
+					<option value="20:30">20:30</option>
+                    <option value="20:45">20:45</option>
+                </select>
+                <span class="error" id="timeError">Veuillez choisir une heure / Please choose the time</span>
+            </div>
+            <div class="form-group">
+                <label for="guests">nombre de couverts / Number of people</label>
+                <select id="guests" name="guests" required>
+                    <option value="">Nombre de couverts / Number of people</option>
+                    <option value="1">1 personne</option>
+                    <option value="2">2 personnes</option>
+                    <option value="3">3 personnes</option>
+                    <option value="4">4 personnes</option>
+                    <option value="5">5 personnes</option>
+                    <option value="6">6 personnes</option>
+					<option value="7">7 personnes</option>
+                    <option value="8">8 personnes</option>					
+                </select>
+                <span class="error" id="guestsError">Veuillez choisir le nombre de personnes / Please choose the number of people</span>
+				<p class="note">Afin de garantir le meilleur service pour vous, votre famille et vos amis, pour toute réservation de plus de 8 personnes, veuillez téléphoner au 02 32 77 44 77 ou envoyer un e-mail à chateau-corneille@orange.fr.</p>
+            </div>
+            <div class="form-group">
+                <label for="phone">Téléphone</label>
+                <input type="tel" id="phone" name="phone" pattern="^0[1-9][0-9]{8}$" required>
+                <span class="error" id="phoneError">Veuillez entrer un numéro de téléphone valide à 10 chiffres commençant par 0/ Please enter a valid 10-digit phone number starting with 0.</span>
+            </div>
+			<div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+                <span class="error" id="emailError">Veuillez entrer une adresse e-mail valide./ Please enter a valid email address</span>
+            </div>
+			<div class="form-group">
+                <label for="message">Message (ex. : allergies, nombre d'enfants)/ Message (e.g.: allergies, number of children)</label>
+                <textarea id="message" name="message" required></textarea>
+                <span class="error" id="messageError">Veuillez entrer un message. Please enter your special requests</span>
+				</div>
+            <button type="submit">envoyer / send</button>
+			<p class="note" > 
+			Sous réserve de disponibilité, nous vous enverrons un e-mail de confirmation dans le meilleur délai. Si vous réservez quelques minutes avant votre arrivée, préférez le téléphone au 02.32.77.44.77.</br>
+            <b>Petit rappel</b>: notre restaurant est fermé le lundi midi, samedi midi et dimanche soir. L’ouverture possible pour les groupes le lundi midi et le samedi midi à partir de 15 personnes.</br>
+            Toute l'équipe vous remercie d'avoir réservé en direct.
+			</p>
+			<p class="note">
+			Subject to availability, we will send you a confirmation email as early as possible. If you book just a few minutes before arrival, please give call us +33 2 32 77 44 77.</br>
+            <b>A reminder</b>: our restaurant is closed Monday and Saturday lunchtime as well as Sunday evening. It's possible to open on the above mentioned close time for your réception, seminair and events etc. Please contact us for more information. </br> 
+            The whole team thanks for your booking.
+			</p>
+        </form>
+    </div>
+    <script>
+        async function handleSubmit(event) {
+            console.log('Form submission started'); // 调试
+			console.log('handleSubmit called');  // 调试
+			event.preventDefault();
+			let isValid = true;
+
+            // Reset error messages
+            document.querySelectorAll('.error').forEach(error => error.style.display = 'none');
+
+            // Validate name
+            const name = document.getElementById('name').value.trim();
+            if (!name) {
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate date
+            const date = document.getElementById('date').value;
+            if (!date) {
+                document.getElementById('dateError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate time
+            const time = document.getElementById('time').value;
+            if (!time) {
+                document.getElementById('timeError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate guests
+            const guests = document.getElementById('guests').value;
+            if (!guests) {
+                document.getElementById('guestsError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate phone
+            const phone = document.getElementById('phone').value;
+            if (!phone.match(/^0[1-9][0-9]{8}$/)) {
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            }
+			
+			 // Validate email
+            const email = document.getElementById('email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate message
+            const message = document.getElementById('message').value.trim();
+            if (!message) { 
+			   document.getElementById('messageError').style.display = 'block'; 
+			   isValid = false; 
+			}
+			
+			const formData = new FormData(document.getElementById('bookingForm'));
+            console.log('FormData entries:', [...formData.entries()]); // 调试
+
+            if (isValid) {
+                //禁用提交按钮，防止重复提交
+                const submitButton = document.querySelector('#bookingForm button[type="submit"]');
+                submitButton.disabled = true;
+			
+				try {
+				    const response = await fetch('/api/book', { method: 'POST', body: formData });
+					const data = await response.json();
+					if (response.ok) {
+					   alert(data.message || 'Réservation réussie ! Nous vous contacterons par email pour confirmation./Booking successful! We will contact you by email for confirmation.');
+                       document.getElementById('bookingForm').reset();
+					} else {
+					   alert(data.error || 'Échec de la soumission. Veuillez réessayer plus tard./Submission failed. Please try again later.');
+					}
+				} catch (error) {
+				    console.error('Network error:', error);
+                    alert ('Erreur réseau. Veuillez réessayer plus tard./Network error. Please try again later.');
+                } finally {
+                    // 重新启用提交按钮
+                    submitButton.disabled = false;
+				} 				  
+            }
+        }
+    </script>
+	  </section>
+      <section class="block-intro">
+         <div class="container">
+           <div class="row">
+             <div class="col-md-12 text-center">
+              <p><a href="https://www.google.com/maps/place/17+Rue+de+l'%C3%89glise,+27600+Vieux-Villez/@49.1716091,1.2872154,16.95z/data=!4m5!3m4!1s0x47e131be6edfef0f:0x4904b6f47e28676c!8m2!3d49.1715395!4d1.2897626" target="_blank">17 rue de l'Eglise - 27600 Vieux Villez</a></p>
+            <p>Coordonnées GPS :  lat. 49.17153949999999 / Long. 1.2897626000000173</p>
+              <div class="footer-phone">02 32 77 44 77</div>
+              <a href="mailto:chateau-corneille@orange.fr" class="footer-mail">chateau-corneille@orange.fr</a>
+               <!-- <div class="footer-social">
+                  <ul class="clearfix">
+                  <li><a href="https://twitter.com/Chcorneille" class="footer-twitter"></a></li>
+				  <li><a href="https://www.instagram.com/chateaucorneille/" class="footer-instagram"></a></li>
+                  <li><a href="https://www.facebook.com/ChateauCorneilleRestaurantLaCloserie/" class="footer-facebook"></a></li>
+                  </ul>
+                </div> -->
+             </div>
+           </div>
+         </div>
+       </section>
+      <footer class="block">
+        <div class="container partners">
+         <div class="row">
+           <div class="col-md-12 text-center">
+              <div id="TA_virtualsticker620" class="TA_virtualsticker">
+                <ul id="3rOJSgQfJO" class="TA_links ODZ9VJg0RUQU">
+				  <li><img src="../img/tripadvisor.png" alt=""></li>                  
+				  <li><img src="../img/normandie.jpg" alt=""></li>
+                  <li><a target="_blank" href="https://www.eure-tourisme.fr/"><img width="200" src="../img/eure-tourisme.png" alt=""></a></li>
+                  <li><img src="../img/tourisme.jpg" alt=""></li>
+				  <li><img src="../img/faitmaison.jpg" alt=""></li>
+                  <li><img src="../img/logis.jpg" alt=""></li>
+                  <li><img width="50px" src="../img/accessible-handicape.png" alt=""></li>
+                </ul>
+              </div>
+              <!-- <section class="customer"><a href="https://reviews.customer-alliance.com/hotel/chateau-corneille-vieux-villez-CS7z46971dsy.html?_locale=fr" title="Château Corneille" target="_blank"><img src="https://widget.customer-alliance.com/reviews/image/fr/chateau-corneille-vieux-villez/CS7z46971dsy-170-200-slimrank.png?smallheight=0&amp;showReviewText=0&amp;showAverageRating=1&amp;showTotalReviews=1&amp;showNumberOfPortals=1&amp;headerBgColor=006A91&amp;ratingValueColor=D09D44" alt="Château Corneille" /></a></section> -->
+           </div>
+         </div>
+       </div>
+         <div class="container siret">
+                <ul>
+                  <li>©Copyright 2023 NEIMAN SAS</li>
+				  <li><a href="alentours.html"> mention légale</a> </li>
+				  <li>Site web réalisé par Château Corneille</a> <li> 
+                </ul>
+              </div>
+      </footer>
+      <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+      <script src="../js/jquery.fancybox.pack.js"></script>
+      <!-- Include all compiled plugins (below), or include individual files as needed -->
+      <script src="../js/bootstrap.min.js"></script>
+      <script src="../js/scripts.js?v=1.7"></script>
+      <script src="../js/jquery.flexslider.js"></script>
+      <script src="../js/jquery.smooth-scroll.js"></script>
+      <script src="../js/modernizr.js"></script>
+      <script src="../js/waypoints.min.js"></script>
+    </body>
+  </html>

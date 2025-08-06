@@ -1,0 +1,22 @@
+{
+  "name": "site-hotel-restaurant",
+  "version": "1.0.0",
+  "description": "Restaurant booking website",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "echo No build step needed"
+  },
+  "engines": {
+	  "node": ">=18.0.0"
+  },
+  "keywords": ["restaurant", "booking", "node", "express"],
+  "author": "Chateau",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.13"
+  }
+}

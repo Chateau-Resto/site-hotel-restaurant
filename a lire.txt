@@ -1,0 +1,4 @@
+index = sans customer alliance
+index_old = avec customer alliance
+
+Renomer en index avec notepad++
