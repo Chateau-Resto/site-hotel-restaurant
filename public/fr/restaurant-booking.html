@@ -206,93 +206,108 @@
 			</p>
         </form>
     </div>
-    <script>
-        async function handleSubmit(event) {
-            console.log('Form submission started'); // 调试
-			console.log('handleSubmit called');  // 调试
-			event.preventDefault();
-			let isValid = true;
+<script>
+    async function handleSubmit(event) {
+        console.log('Form submission started'); // 调试
+        console.log('handleSubmit called');  // 调试
+        event.preventDefault();
+        let isValid = true;
 
-            // Reset error messages
-            document.querySelectorAll('.error').forEach(error => error.style.display = 'none');
+        // Reset error messages
+        document.querySelectorAll('.error').forEach(error => error.style.display = 'none');
 
-            // Validate name
-            const name = document.getElementById('name').value.trim();
-            if (!name) {
-                document.getElementById('nameError').style.display = 'block';
-                isValid = false;
-            }
-
-            // Validate date
-            const date = document.getElementById('date').value;
-            if (!date) {
-                document.getElementById('dateError').style.display = 'block';
-                isValid = false;
-            }
-
-            // Validate time
-            const time = document.getElementById('time').value;
-            if (!time) {
-                document.getElementById('timeError').style.display = 'block';
-                isValid = false;
-            }
-
-            // Validate guests
-            const guests = document.getElementById('guests').value;
-            if (!guests) {
-                document.getElementById('guestsError').style.display = 'block';
-                isValid = false;
-            }
-
-            // Validate phone
-            const phone = document.getElementById('phone').value;
-            if (!phone.match(/^0[1-9][0-9]{8}$/)) {
-                document.getElementById('phoneError').style.display = 'block';
-                isValid = false;
-            }
-			
-			 // Validate email
-            const email = document.getElementById('email').value;
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!email || !emailRegex.test(email)) {
-                document.getElementById('emailError').style.display = 'block';
-                isValid = false;
-            }
-
-            // Validate message
-            const message = document.getElementById('message').value.trim();
-            if (!message) { 
-			   document.getElementById('messageError').style.display = 'block'; 
-			   isValid = false; 
-			}
-			
-			const formData = new FormData(document.getElementById('bookingForm'));
-            console.log('FormData entries:', [...formData.entries()]); // 调试
-
-            if (isValid) {
-                //禁用提交按钮，防止重复提交
-                const submitButton = document.querySelector('#bookingForm button[type="submit"]');
-                submitButton.disabled = true;
-			
-				try {
-				    const response = await fetch('/api/book', { method: 'POST', body: formData });
-					const data = await response.json();
-					if (response.ok) {
-					   alert(data.message || 'Réservation réussie ! Nous vous contacterons par email pour confirmation./Booking successful! We will contact you by email for confirmation.');
-                       document.getElementById('bookingForm').reset();
-					} else {
-					   alert(data.error || 'Échec de la soumission. Veuillez réessayer plus tard./Submission failed. Please try again later.');
-					}
-				} catch (error) {
-				    console.error('Network error:', error);
-                    alert ('Erreur réseau. Veuillez réessayer plus tard./Network error. Please try again later.');
-                } finally {
-                    // 重新启用提交按钮
-                    submitButton.disabled = false;
-				} 				  
-            }
+        // Validate name
+        const name = document.getElementById('name').value.trim();
+        if (!name) {
+            document.getElementById('nameError').style.display = 'block';
+            isValid = false;
         }
-    </script>
+
+        // Validate date
+        const date = document.getElementById('date').value;
+        if (!date) {
+            document.getElementById('dateError').style.display = 'block';
+            isValid = false;
+        }
+
+        // Validate time
+        const time = document.getElementById('time').value;
+        if (!time) {
+            document.getElementById('timeError').style.display = 'block';
+            isValid = false;
+        }
+
+        // Validate guests
+        const guests = document.getElementById('guests').value;
+        if (!guests) {
+            document.getElementById('guestsError').style.display = 'block';
+            isValid = false;
+        }
+
+        // Validate phone
+        const phone = document.getElementById('phone').value;
+        if (!phone.match(/^0[1-9][0-9]{8}$/)) {
+            document.getElementById('phoneError').style.display = 'block';
+            isValid = false;
+        }
+        
+        // Validate email
+        const email = document.getElementById('email').value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!email || !emailRegex.test(email)) {
+            document.getElementById('emailError').style.display = 'block';
+            isValid = false;
+        }
+
+        // Validate message
+        const message = document.getElementById('message').value.trim();
+        if (!message) { 
+            document.getElementById('messageError').style.display = 'block'; 
+            isValid = false; 
+        }
+
+        if (isValid) {
+            // 禁用提交按钮，防止重复提交
+            const submitButton = document.querySelector('#bookingForm button[type="submit"]');
+            submitButton.disabled = true;
+
+            // 准备 JSON 数据
+            const data = {
+                name: name,
+                date: date,
+                time: time,
+                guests: guests,
+                phone: phone,
+                email: email,
+                message: message
+            };
+            console.log('Form data:', data); // 调试
+
+            try {
+                const response = await fetch('/api/book', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (response.ok) {
+                    alert(result.message || 'Réservation réussie ! Nous vous contacterons par email pour confirmation./Booking successful! We will contact you by email for confirmation.');
+                    document.getElementById('bookingForm').reset();
+                } else {
+                    alert(result.error || 'Échec de la soumission. Veuillez réessayer plus tard./Submission failed. Please try again later.');
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+                alert('Erreur réseau. Veuillez réessayer plus tard./Network error. Please try again later.');
+            } finally {
+                // 重新启用提交按钮
+                submitButton.disabled = false;
+            }          
+        }
+    }
+</script>
 	  </section>
       <section class="block-intro">
          <div class="container">
