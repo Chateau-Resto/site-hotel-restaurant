@@ -10,8 +10,9 @@ console.log('EMAIL_USER:', process.env.EMAIL_USER);
 console.log('EMAIL_PASS:', process.env.EMAIL_PASS);
 
 // 中间件
-app.use(cors());
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 // 服务 public/ 目录中的静态文件 (css,js等)
 app.use(express.static(path.join(__dirname, 'public'))); 
@@ -42,6 +43,7 @@ const transporter = nodemailer.createTransport({
 app.post('/api/book', async (req, res) => {
 	console.log('Content-Type:', req.headers['content-type']);
 	console.log('Received body:', req.body); // 调试日志
+	console.log('Raw body:', req.body); // 调试原始 body
     const { name, date, time, guests, phone, email, message } = req.body || {};
 
     // 验证数据
