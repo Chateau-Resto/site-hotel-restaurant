@@ -11,7 +11,7 @@ console.log('EMAIL_PASS:', process.env.EMAIL_PASS);
 
 // 中间件
 app.use(cors({
-	origine: 'https://www.chateau-corneille.fr/'  // 替换为 OVHcloud 域名
+	origin: 'https://www.chateau-corneille.fr'  // 替换为 OVHcloud 域名
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -35,7 +35,7 @@ app.post('/api/book', async (req, res) => {
     const { name, date, time, guests, phone, email, message } = req.body || {};
 
     // 验证数据
-       if (!name || !date || !time || !guests || !phone|| !email|| !message) {
+       if (!req.body ||!name || !date || !time || !guests || !phone|| !email|| !message) {
            return res.status(400).json({ error: 'Tous les champs sont obligatoires./ All fields are required' });
        }
 
@@ -48,7 +48,7 @@ app.post('/api/book', async (req, res) => {
 	try {
     // 动态生成邮件内容
        const mailOptions = {
-           from: 'lacloserietiktok@gmail.com',
+           from: process.env.EMAIL_USER,
            to: 'chateau-corneille@orange.fr',
            subject: 'Nouvelle Demande de Réservation',
            text: `
@@ -84,6 +84,9 @@ app.post('/api/book', async (req, res) => {
         res.status(500).json({ error: 'Échec de l’envoi de l’e-mail. Veuillez réessayer plus tard./Submission failed. Please try again later.' });
     }
 });
+
+// 健康检查端点
+app.get('/health', (req, res) => res.status(200).json({ status: 'OK' }));
 
 // 启动服务器(仅定义一次)
 const PORT = process.env.PORT || 3000;
