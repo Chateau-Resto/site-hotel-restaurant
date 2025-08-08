@@ -10,26 +10,12 @@ console.log('EMAIL_USER:', process.env.EMAIL_USER);
 console.log('EMAIL_PASS:', process.env.EMAIL_PASS);
 
 // 中间件
+app.use(cors({
+	origine: 'https://www.chateau-corneille.fr/  // 替换为 OVHcloud 域名
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
 
-// 服务 public/ 目录中的静态文件 (css,js等)
-app.use(express.static(path.join(__dirname, 'public'))); 
-console.log('Serving static files from:', path.join(__dirname, 'public'));
-
-//专用路由加载 restaurant-booking.html
-app.get('/booking', (req, res) => {
-	console.log('Serving /fr/restaurant-booking.html');
-	res.sendFile(path.join(__dirname, 'public/fr/restaurant-booking.html'));
-});
-
-// 默认路由，重定向到主页面 index.html
-app.get('/', (req, res) => {
-    console.log('Redirecting to / (index.html)');
-    res.sendFile(path.join(__dirname, 'public/index.html'));
-});
-	
 // 配置Nodemailer使用Orange SMTP
 const transporter = nodemailer.createTransport({
     service: 'gmail',
