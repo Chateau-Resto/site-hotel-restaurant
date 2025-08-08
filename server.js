@@ -36,7 +36,9 @@ const transporter = nodemailer.createTransport({
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    }
+    },
+	logger: true, // 启用日志
+	debug: true // 启用调试
 });
 
 // 处理预订请求
