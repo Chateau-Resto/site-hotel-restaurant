@@ -88,8 +88,12 @@ app.post('/api/book', async (req, res) => {
 // 健康检查端点
 app.get('/health', (req, res) => res.status(200).json({ status: 'OK' }));
 
-// 启动服务器(仅定义一次)
-const PORT = process.env.PORT || 3000;
+// 启动服务器
+const PORT = process.env.PORT;
+if (!PORT) {
+    console.error('PORT environment variable not set by Render');
+    process.exit(1);
+}
 app.listen(PORT, () => {
     console.log(`Serveur en cours d'exécution sur le port ${PORT}`);
 });
