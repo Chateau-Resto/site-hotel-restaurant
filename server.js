@@ -11,7 +11,7 @@ console.log('EMAIL_PASS:', process.env.EMAIL_PASS);
 
 // 中间件
 app.use(cors({
-	origine: 'https://www.chateau-corneille.fr/  // 替换为 OVHcloud 域名
+	origine: 'https://www.chateau-corneille.fr/'  // 替换为 OVHcloud 域名
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
