@@ -36,16 +36,20 @@ app.post('/api/book', async (req, res) => {
 	console.log('Raw body:', req.body); // 调试原始 body
     const { name, date, time, guests, phone, email, message } = req.body || {};
 
-    // 验证数据
-       if (!req.body ||!name || !date || !time || !guests || !phone|| !email|| !message) {
-           return res.status(400).json({ error: 'Tous les champs sont obligatoires./ All fields are required' });
+    // 验证数据 only required fields except message
+       if (!req.body ||!name || !date || !time || !guests || !phone|| !email) {
+           return res.status(400).json({ error: 'Tous les champs sont obligatoires sauf le message./ All fields are required except message' });
        }
 
     // 基本格式验证
-       const phoneRegex = /^0[1-9][0-9]{8}$/; // 法国10位电话号码
-       if (!phoneRegex.test(phone)) {
-           return res.status(400).json({ error: 'Numéro de téléphone invalide (10 chiffres commençant par 0)./phone number invalide (10-digit starting with 0).' });
-       }
+	   if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        return res.status(400).json({ error: 'Date invalide.' });
+    }
+		   
+       const phoneRegex = /^(\+([1-9][0-9]{0,2})[-. ]?)?[0-9]{6,14}$/;
+    if (!phone || !phoneRegex.test(phone)) {
+        return res.status(400).json({ error: 'Numéro de téléphone invalide. Utilisez un format comme +33123456789 ou 0123456789./phone number invalide. Use format like +33123456789 or 0123456789 ' });
+    }
     
 	try {
     // 动态生成邮件内容
@@ -61,7 +65,7 @@ app.post('/api/book', async (req, res) => {
                Nombre de personnes : ${guests}
                Phone : ${phone}
                Email du client : ${email}
-               Message : ${message}
+               Message : ${message || 'Aucun message / No message'}
            `,
            html: `
                <h2>Nouvelle Demande de Réservation</h2>
@@ -73,7 +77,7 @@ app.post('/api/book', async (req, res) => {
                    <li><strong>Nombre de personnes :</strong> ${guests}</li>
                    <li><strong>Phone :</strong> ${phone}</li>
                    <li><strong>Email du client :</strong> ${email}</li>
-                   <li><strong>Message :</strong> ${message}</li>
+                   <li><strong>Message :</strong> ${message || 'Aucun message / No message'}</li>
                </ul>
            `
        };
