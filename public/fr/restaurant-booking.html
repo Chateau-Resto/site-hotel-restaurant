@@ -237,9 +237,13 @@
                 isValid = false;
             } else {
                 const dayOfWeek = date.getDay();
-                const time = document.getElementById('time').value;
+                const timeSelect = document.getElementById('time'); // Get select element
+                const time = timeSelect.value; // Ensure time is the selected value
 
-                if (time) {
+                if (!time) {
+				    document.getElementById('timeError').style.display = 'block';
+                    isValid = false;
+                } else {
                     const timeValue = parseInt(time.replace(':', ''));
                     const min19 = 1900, max1330 = 1330;
                     if ((dayOfWeek === 1 || dayOfWeek === 6) && timeValue < min19) {
@@ -251,9 +255,6 @@
                         document.getElementById('timeError').style.display = 'block';
                         isValid = false;
                     }
-                } else {
-                    document.getElementById('timeError').style.display = 'block';
-                    isValid = false;
                 }
             }
         }
@@ -299,7 +300,7 @@
                 email: email,
                 message: message
             };
-            console.log('Form data:', data);
+            console.log('Form data before fetch', data); // Debug
 
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000);
