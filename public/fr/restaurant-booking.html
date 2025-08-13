@@ -225,46 +225,53 @@
 
         // Validate date
         const dateInput = document.getElementById('date');
-        const dateValue = dateInput.value;
-        if (!dateValue) {
+        if (!dateInput) {
+            console.error('Date input element not found');
+            document.getElementById('dateError').textContent = 'Erreur interne. Veuillez réessayer./ Internal error. Please try again.';
             document.getElementById('dateError').style.display = 'block';
             isValid = false;
         } else {
-            const date = new Date(dateValue);
-            if (isNaN(date.getTime())) {
-                document.getElementById('dateError').textContent = 'Date invalide. Veuillez choisir une date valide. / Invalid date. Please choose a valid date.';
+            const dateValue = dateInput.value;
+            if (!dateValue) {
                 document.getElementById('dateError').style.display = 'block';
                 isValid = false;
             } else {
-                const dayOfWeek = date.getDay();
-                const timeSelect = document.getElementById('time');
-                if (!timeSelect) {
-                    console.error('Time select element not found');
-                    document.getElementById('timeError').textContent = 'Erreur interne. Veuillez réessayer./ Internal error. Please try again.';
-                    document.getElementById('timeError').style.display = 'block';
+                const date = new Date(dateValue);
+                if (isNaN(date.getTime())) {
+                    document.getElementById('dateError').textContent = 'Date invalide. Veuillez choisir une date valide. / Invalid date. Please choose a valid date.';
+                    document.getElementById('dateError').style.display = 'block';
                     isValid = false;
                 } else {
-                    const time = timeSelect.value;
-                    console.log('Selected time:', time);
-                
-                    if (!time) {
-                        document.getElementById('timeError').style.display = 'block';
-                        isValid = false;
-                    } else if (!/^\d{2}:\d{2}$/.test(time)) { // Add time format validation
-                        document.getElementById('timeError').textContent = 'Heure invalide. Utilisez un format comme 12:00./ Invalid time. Use format like 12:00.';
+                    const dayOfWeek = date.getDay();
+                    const timeSelect = document.getElementById('time');
+                    if (!timeSelect) {
+                        console.error('Time select element not found');
+                        document.getElementById('timeError').textContent = 'Erreur interne. Veuillez réessayer./ Internal error. Please try again.';
                         document.getElementById('timeError').style.display = 'block';
                         isValid = false;
                     } else {
-                        const timeValue = parseInt(time.replace(':', ''));
-                        const min19 = 1900, max1330 = 1330;
-                        if ((dayOfWeek === 1 || dayOfWeek === 6) && timeValue < min19) {
-                            document.getElementById('timeError').textContent = 'Pour le lundi ou le samedi, veuillez choisir 19:00 ou plus tard. / For Monday or Saturday, please choose 19:00 or later.';
+                        const time = timeSelect.value;
+                        console.log('Selected time element:', timeSelect); // Debug element
+                        console.log('Selected time value:', time); // Debug value
+                        if (!time) {
                             document.getElementById('timeError').style.display = 'block';
                             isValid = false;
-                        } else if (dayOfWeek === 0 && (timeValue < 1200 || timeValue > max1330)) {
-                            document.getElementById('timeError').textContent = 'Pour le dimanche, veuillez choisir entre 12:00 et 13:30. / For Sunday, please choose between 12:00 and 13:30.';
+                        } else if (!/^\d{2}:\d{2}$/.test(time)) {
+                            document.getElementById('timeError').textContent = 'Heure invalide. Utilisez un format comme 12:00./ Invalid time. Use format like 12:00.';
                             document.getElementById('timeError').style.display = 'block';
                             isValid = false;
+                        } else {
+                            const timeValue = parseInt(time.replace(':', ''));
+                            const min19 = 1900, max1330 = 1330;
+                            if ((dayOfWeek === 1 || dayOfWeek === 6) && timeValue < min19) {
+                                document.getElementById('timeError').textContent = 'Pour le lundi ou le samedi, veuillez choisir 19:00 ou plus tard. / For Monday or Saturday, please choose 19:00 or later.';
+                                document.getElementById('timeError').style.display = 'block';
+                                isValid = false;
+                            } else if (dayOfWeek === 0 && (timeValue < 1200 || timeValue > max1330)) {
+                                document.getElementById('timeError').textContent = 'Pour le dimanche, veuillez choisir entre 12:00 et 13:30. / For Sunday, please choose between 12:00 and 13:30.';
+                                document.getElementById('timeError').style.display = 'block';
+                                isValid = false;
+                            }
                         }
                     }
                 }
@@ -312,7 +319,7 @@
                 email: email,
                 message: message
             };
-            console.log('Form data before fetch', data);
+            console.log('Form data before fetch:', data);
 
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000);
