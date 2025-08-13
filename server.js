@@ -42,17 +42,9 @@ app.post('/api/book', async (req, res) => {
        }
 
     // 基本格式验证
-	   if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-        return res.status(400).json({ error: 'Date invalide.' });
-    }
-	
-	   if (typeof time !== 'string' || !/^\d{2}:\d{2}$/.test(time)) { // Validate time format
-        return res.status(400).json({ error: 'Heure invalide. Utilisez un format comme 12:00./ Invalid time. Use format like 12:00.' });
-    } 
-		
-       const phoneRegex = /^(\+([1-9][0-9]{0,2})[-. ]?)?[0-9]{6,14}$/;
-    if (!phone || !phoneRegex.test(phone)) {
-        return res.status(400).json({ error: 'Numéro de téléphone invalide. Utilisez un format comme +33123456789 ou 0123456789./phone number invalide. Use format like +33123456789 or 0123456789 ' });
+	   const phoneRegex = /^(\+([1-9][0-9]{0,2})[-. ]?)?[0-9]{6,14}$/;
+       if (!phone || !phoneRegex.test(phone)) {
+       return res.status(400).json({ error: 'Numéro de téléphone invalide. Utilisez un format comme +33123456789 ou 0123456789./phone number invalide. Use format like +33123456789 or 0123456789 ' });
     }
     
 	try {

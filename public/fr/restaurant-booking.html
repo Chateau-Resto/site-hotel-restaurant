@@ -140,7 +140,7 @@
       </section> -->
 	  <section class="block-intro">    
       <div class="container">
-        <h1>Réservez votre table / Book your talbe </h1>
+        <h1>Réservez votre table / Book your table </h1>
 			<p class="note" > Sous réserve de disponibilité, nous vous enverrons un e-mail de confirmation dans le meilleur délai. Si vous réservez le jour même, préférez le téléphone au 02.32.77.44.77.</p>
 			<p class="note">Subject to availability, we will send you a confirmation email as early as possible. If you are booking for the same day, please call us +33 2 32 77 44 77.</p>
         <form id="bookingForm" onsubmit="handleSubmit(event)">
@@ -202,19 +202,24 @@
                 <span class="error" id="messageError">Veuillez entrer un message si nécessaire. / Please enter a message if needed.</span>
             </div>
             <button type="submit">Submit / send <span id="loading" style="display:none">Loading...</span></button>
-            <p class="note">Toute l'équipe vous remercie d'avoir réservé en direct.</p>
-			<p class="note">The whole team thanks for your booking.</p>
+            <p class="note">Toute l'équipe vous remercie d'avoir réservé en direct./ The whole team thanks for your booking.</p>
         </form>
     </div>
 <script defer>
-    async function handleSubmit(event) {
-        console.log('Form submission started');
-        console.log('handleSubmit called');
+   async function handleSubmit(event) {
+        console.log('Form submission started'); // 调试
+        console.log('handleSubmit called');  // 调试
         event.preventDefault();
         let isValid = true;
 
         // Reset error messages
         document.querySelectorAll('.error').forEach(error => error.style.display = 'none');
+        // 添加 DOM 检查
+        if (!document.getElementById('bookingForm')) {
+            console.error('Booking form not found');
+            alert('Erreur interne. Veuillez recharger la page./ Internal error. Please reload the page.');
+            return;
+        }
 
         // Validate name
         const name = document.getElementById('name').value.trim();
@@ -224,58 +229,17 @@
         }
 
         // Validate date
-        const dateInput = document.getElementById('date');
-        if (!dateInput) {
-            console.error('Date input element not found');
-            document.getElementById('dateError').textContent = 'Erreur interne. Veuillez réessayer./ Internal error. Please try again.';
+        const date = document.getElementById('date').value;
+        if (!date) {
             document.getElementById('dateError').style.display = 'block';
             isValid = false;
-        } else {
-            const dateValue = dateInput.value;
-            if (!dateValue) {
-                document.getElementById('dateError').style.display = 'block';
-                isValid = false;
-            } else {
-                const date = new Date(dateValue);
-                if (isNaN(date.getTime())) {
-                    document.getElementById('dateError').textContent = 'Date invalide. Veuillez choisir une date valide. / Invalid date. Please choose a valid date.';
-                    document.getElementById('dateError').style.display = 'block';
-                    isValid = false;
-                } else {
-                    const dayOfWeek = date.getDay();
-                    const timeSelect = document.getElementById('time');
-                    if (!timeSelect) {
-                        console.error('Time select element not found');
-                        document.getElementById('timeError').textContent = 'Erreur interne. Veuillez réessayer./ Internal error. Please try again.';
-                        document.getElementById('timeError').style.display = 'block';
-                        isValid = false;
-                    } else {
-                        const time = timeSelect.value;
-                        console.log('Selected time element:', timeSelect); // Debug element
-                        console.log('Selected time value:', time); // Debug value
-                        if (!time) {
-                            document.getElementById('timeError').style.display = 'block';
-                            isValid = false;
-                        } else if (!/^\d{2}:\d{2}$/.test(time)) {
-                            document.getElementById('timeError').textContent = 'Heure invalide. Utilisez un format comme 12:00./ Invalid time. Use format like 12:00.';
-                            document.getElementById('timeError').style.display = 'block';
-                            isValid = false;
-                        } else {
-                            const timeValue = parseInt(time.replace(':', ''));
-                            const min19 = 1900, max1330 = 1330;
-                            if ((dayOfWeek === 1 || dayOfWeek === 6) && timeValue < min19) {
-                                document.getElementById('timeError').textContent = 'Pour le lundi ou le samedi, veuillez choisir 19:00 ou plus tard. / For Monday or Saturday, please choose 19:00 or later.';
-                                document.getElementById('timeError').style.display = 'block';
-                                isValid = false;
-                            } else if (dayOfWeek === 0 && (timeValue < 1200 || timeValue > max1330)) {
-                                document.getElementById('timeError').textContent = 'Pour le dimanche, veuillez choisir entre 12:00 et 13:30. / For Sunday, please choose between 12:00 and 13:30.';
-                                document.getElementById('timeError').style.display = 'block';
-                                isValid = false;
-                            }
-                        }
-                    }
-                }
-            }
+        }
+
+        // Validate time
+        const time = document.getElementById('time').value;
+        if (!time) {
+            document.getElementById('timeError').style.display = 'block';
+            isValid = false;
         }
 
         // Validate guests
@@ -309,17 +273,18 @@
             const submitButton = document.querySelector('#bookingForm button[type="submit"]');
             submitButton.disabled = true;
             document.getElementById('loading').style.display = 'inline';
-
+            
+			// 准备 JSON 数据
             const data = {
                 name: name,
-                date: dateValue,
+                date: date,
                 time: time,
                 guests: guests,
                 phone: phone,
                 email: email,
                 message: message
             };
-            console.log('Form data before fetch:', data);
+            console.log('Form data:', data); // 调试
 
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 10000);
