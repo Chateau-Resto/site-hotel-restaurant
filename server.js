@@ -29,6 +29,8 @@ const transporter = nodemailer.createTransport({
 
 // 处理预订请求
 app.post('/api/book', async (req, res) => {
+	const requestTime = new Date().toISOString(); // UTC 时间戳
+    console.log(`Request received at ${requestTime}`);
 	console.log('Content-Type:', req.headers['content-type']);
 	console.log('Received body:', req.body); // 调试日志
 	console.log('Raw body:', req.body); // 调试原始 body
