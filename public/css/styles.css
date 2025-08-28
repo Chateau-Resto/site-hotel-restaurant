@@ -184,6 +184,7 @@ h2 { text-transform: uppercase; color: #282f35; letter-spacing: 2px; font-size: 
 /* ==========================================================================
 Custom Styles
 ========================================================================== */
+.text-white { color: white; }
 .clearfix:before, .clearfix:after { content: " "; display: table; }
 .clearfix:after { clear: both; }
 .clearfix { *zoom: 1; }

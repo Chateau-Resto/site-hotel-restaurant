@@ -209,14 +209,9 @@
     </div>
 <script defer>
    async function handleSubmit(event) {
-        // 防止重复提交
-        const submitButton = document.querySelector('#bookingForm button[type="submit"]');
-        if (submitButton.disabled) return; // 如果已禁用，直接返回
-        submitButton.disabled = true;
-        document.getElementById('loading').style.display = 'inline';
-        console.log('Form submission started at:', new Date().toISOString());  // 提供时间戳，记录提交的精确时间
-        
-		event.preventDefault();
+        console.log('Form submission started'); // 调试
+        console.log('handleSubmit called');  // 调试
+        event.preventDefault();
         let isValid = true;
 
         // Reset error messages
@@ -225,9 +220,7 @@
         if (!document.getElementById('bookingForm')) {
             console.error('Booking form not found');
             alert('Erreur interne. Veuillez recharger la page./ Internal error. Please reload the page.');
-            document.getElementById('loading').style.display = 'none';
-            submitButton.disabled = false;
-			return;
+            return;
         }
 
         // Validate name
@@ -321,15 +314,9 @@
                 submitButton.textContent = 'Submit';
                 clearTimeout(timeoutId);
             }
-		} else {
-            // 如果验证失败，恢复按钮
-            document.getElementById('loading').style.display = 'none';
-            submitButton.disabled = false;
-            submitButton.textContent = 'Submit';
         }
     }
     window.handleSubmit = handleSubmit;
-	console.log('handleSubmit function loaded');
 </script>
 	  </section>
       <section class="block-intro">
