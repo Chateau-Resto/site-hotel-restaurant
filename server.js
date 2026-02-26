@@ -16,12 +16,12 @@ app.use(express.urlencoded({ extended: true }));
 
 // 配置Nodemailer使用 OVH SMTP
 const transporter = nodemailer.createTransport({
-    host: process.env.OVH_HOST,
-    port: process.env.OVH_PORT,
-    secure: true, // 端口是 465
+    host: process.env.BREVO_HOST,
+    port: process.env.BREVO_PORT,
+    secure: false, // 端口是 2525,用false
     auth: {
-        user: process.env.OVH_USER,
-        pass: process.env.OVH_PASS
+        user: process.env.BREVO_USER,
+        pass: process.env.BREVO_PASS
     },
     // 保留你之前设置的超时选项
     connectionTimeout: 30000,
