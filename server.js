@@ -14,14 +14,14 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 配置Nodemailer使用 BREVO SMTP
+// 配置Nodemailer使用 OVH SMTP
 const transporter = nodemailer.createTransport({
-    host: process.env.BREVO_HOST,
-    port: process.env.BREVO_PORT,
-    secure: false, // 因为端口是 587，所以用 false
+    host: process.env.OVH_HOST,
+    port: process.env.OVH_PORT,
+    secure: false, // 端口是 587，所以用 false
     auth: {
-        user: process.env.BREVO_USER,
-        pass: process.env.BREVO_PASS
+        user: process.env.OVH_USER,
+        pass: process.env.OVH_PASS
     },
     // 保留你之前设置的超时选项
     connectionTimeout: 30000,
