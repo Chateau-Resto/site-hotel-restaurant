@@ -6,8 +6,6 @@ const app = express();
 
 // 加载 .env 文件
 require('dotenv').config({ path: path.join(__dirname, '.env')}); 
-console.log('EMAIL_USER:', process.env.EMAIL_USER);
-console.log('EMAIL_PASS:', process.env.EMAIL_PASS);
 
 // 中间件
 app.use(cors({
@@ -56,8 +54,8 @@ app.post('/api/book', async (req, res) => {
 	try {
     // 动态生成邮件内容
        const mailOptions = {
-           from: process.env.BREVO_USER,
-           to: 'chateau-corneille@orange.fr',
+           from: '"Booking Restaurant La Closerie" <reservation@chateau-corneille.fr>',  
+           to: 'contact@chateau-corneille.fr', 
            subject: 'Nouvelle Demande de Réservation',
            text: `
                Nouvelle demande :
