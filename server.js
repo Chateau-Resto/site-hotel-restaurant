@@ -24,7 +24,7 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS
     },
 	logger: true, // 启用日志
-	debug: true // 启用调试
+	debug: true, // 启用调试
 	// 新增以下配置，解决 Connection timeout 问题，即Nodemailer 尝试连接 Gmail SMTP 服务器的时候
 	connectionTimeout: 30000,   // 30秒连接超时
     greetingTimeout: 30000,     // 30秒问候超时
