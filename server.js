@@ -18,7 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 const transporter = nodemailer.createTransport({
     host: process.env.OVH_HOST,
     port: process.env.OVH_PORT,
-    secure: false, // 端口是 587，所以用 false
+    secure: true, // 端口是 465
     auth: {
         user: process.env.OVH_USER,
         pass: process.env.OVH_PASS
