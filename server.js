@@ -16,21 +16,21 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 配置Nodemailer使用Orange SMTP
+// 配置Nodemailer使用 BREVO SMTP
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: process.env.BREVO_HOST,
+    port: process.env.BREVO_PORT,
+    secure: false, // 因为端口是 587，所以用 false
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
+        user: process.env.BREVO_USER,
+        pass: process.env.BREVO_PASS
     },
-	logger: true, // 启用日志
-	debug: true, // 启用调试
-	// 新增以下配置，解决 Connection timeout 问题，即Nodemailer 尝试连接 Gmail SMTP 服务器的时候
-	connectionTimeout: 30000,   // 30秒连接超时
-    greetingTimeout: 30000,     // 30秒问候超时
-    socketTimeout: 30000,       // 30秒数据传输超时
-    maxRetries: 2,              // 失败后自动重试2次
-    retryDelay: 5000            // 每次重试间隔5秒
+    // 保留你之前设置的超时选项
+    connectionTimeout: 30000,
+    greetingTimeout: 30000,
+    socketTimeout: 30000,
+    maxRetries: 2,
+    retryDelay: 5000
 });
 
 // 处理预订请求
@@ -56,7 +56,7 @@ app.post('/api/book', async (req, res) => {
 	try {
     // 动态生成邮件内容
        const mailOptions = {
-           from: process.env.EMAIL_USER,
+           from: process.env.BREVO_USER,
            to: 'chateau-corneille@orange.fr',
            subject: 'Nouvelle Demande de Réservation',
            text: `
